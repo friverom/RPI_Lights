@@ -167,6 +167,9 @@ public class Light_Task {
                     Logger.getLogger(Light_Task.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            rpio.releaseLock(LIGHTSTASK, TASKLEVEL, OB_LIGHTS);
+            rpio.releaseLock(LIGHTSTASK, TASKLEVEL, INT_LIGHTS);
+            rpio.releaseLock(LIGHTSTASK, TASKLEVEL, EXT_LIGHTS);
         }
     
     }

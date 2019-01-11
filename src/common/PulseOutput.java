@@ -15,7 +15,7 @@ import rpio_client.Net_RPI_IO;
  */
 public class PulseOutput implements Runnable {
     
-    private Net_RPI_IO rpio=new Net_RPI_IO("192.168.1.58",30000);
+    private Net_RPI_IO rpio=new Net_RPI_IO("localhost",30000);
     private int relay=0;
     private int timer=0;
     private int task;
