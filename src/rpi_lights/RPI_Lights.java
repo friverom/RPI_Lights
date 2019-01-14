@@ -105,6 +105,9 @@ public class RPI_Lights {
             case "set timer":
                 reply=lights.set_light_timer((int) data);
                 break;
+            case "get timer":
+                reply=lights.getTimer();
+                break;
             case "platform on":
                 reply=lights.plt_lights_on();
                 break;
@@ -120,8 +123,14 @@ public class RPI_Lights {
             case "set latitude":
                 reply=lights.set_latitude(data);
                 break;
+            case "get latitude":
+                reply=lights.get_latitude();
+                break;
             case "set longitude":
                 reply=lights.set_longitude(data);
+                break;
+            case "get longitude":
+                reply=lights.get_longitude();
                 break;
                 
             default:

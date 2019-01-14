@@ -65,13 +65,26 @@ public class Light_Task {
         this.longitud=lon;
         return "Longitude set";
     }
+    
+    public String get_longitude(){
+        String longitude = String.format("%.6f",this.longitud);
+        return longitude;
+    }
     public String set_latitude(double lat){
         this.latitud=lat;
         return "Latitude set";
     }
+    public String get_latitude(){
+        String lat = String.format("%.6f", this.latitud);
+        return lat;
+    }
+    
     public String set_light_timer(int timer){
         int_light_timer=timer;
         return "Timer set";
+    }
+    public String getTimer(){
+        return ""+this.int_light_timer;
     }
     
     public String plt_lights_on(){
@@ -104,6 +117,7 @@ public class Light_Task {
     public String getSunData() {
         SimpleDateFormat format1 = new SimpleDateFormat("HH:mm zzz");
         
+        calc.setLocation(latitud, longitud);
         Calendar date = Calendar.getInstance();
         Calendar set = calc.getSunset(date);
         
