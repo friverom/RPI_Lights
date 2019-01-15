@@ -80,7 +80,7 @@ public class RPI_Lights {
      * @param request
      * @return 
      */
-    private static String processRequest(String request){
+    private static String processRequest(String request) throws IOException{
         String reply="";
         String command="";
         double data=0;

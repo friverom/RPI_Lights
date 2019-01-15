@@ -7,11 +7,16 @@ package rpi_lights;
 
 import common.PulseOutput;
 import common.SunsetCalculator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpio_client.Net_RPI_IO;
+import util.ReadTextFile;
+import util.WriteTextFile;
 
 /**
  *
@@ -42,15 +47,16 @@ public class Light_Task {
     Thread setTimer = null;
     private SunsetCalculator calc=new SunsetCalculator();
     
-    public Light_Task(String address){
+    public Light_Task(String address) throws IOException{
         this.address=address;
         this.rpio = new Net_RPI_IO(this.address,30000);
-        
+        readSettings();
     }
     
-    public Light_Task(){
+    public Light_Task() throws IOException{
         this.address="localhost";
         this.rpio = new Net_RPI_IO(this.address,30000);
+        readSettings();
         
     }
     
@@ -61,8 +67,9 @@ public class Light_Task {
         return "Light Task started";
     }
    
-    public String set_longitude(double lon){
+    public String set_longitude(double lon) throws IOException{
         this.longitud=lon;
+        saveSettings();
         return "Longitude set";
     }
     
@@ -70,8 +77,9 @@ public class Light_Task {
         String longitude = String.format("%.6f",this.longitud);
         return longitude;
     }
-    public String set_latitude(double lat){
+    public String set_latitude(double lat) throws IOException{
         this.latitud=lat;
+        saveSettings();
         return "Latitude set";
     }
     public String get_latitude(){
@@ -79,8 +87,9 @@ public class Light_Task {
         return lat;
     }
     
-    public String set_light_timer(int timer){
+    public String set_light_timer(int timer) throws IOException{
         int_light_timer=timer;
+        saveSettings();
         return "Timer set";
     }
     public String getTimer(){
@@ -153,8 +162,9 @@ public class Light_Task {
         return report;
     }
     
-    public String killThread(){
+    public String killThread() throws IOException{
         runFlag = false;
+        saveSettings();
         return "killed";
     }
     
@@ -290,5 +300,48 @@ public class Light_Task {
             status = true;
         }
         return status;
+    }
+    
+     /**
+     * Reads variable setting for Light task.
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    private void readSettings() throws FileNotFoundException, IOException{
+        String path = "/home/pi/NetBeansProjects/RPI_Lights/vars.txt";
+        File file = new File(path);
+       
+        if(!file.exists()){
+            file.createNewFile();
+            saveSettings();
+        }
+        
+        ReadTextFile rf = new ReadTextFile(path);
+        String[] lines=rf.openFile();
+        
+        String text = null;
+        String[] parts = lines[0].split(";",3);
+        
+        if(parts.length==3){
+                int_light_timer=Integer.parseInt(parts[0]);
+                latitud=Double.parseDouble(parts[1]);
+                longitud=Double.parseDouble(parts[2]);
+            }
+      
+    }
+    
+     /**
+     * Saves variable settings to file
+     * @return
+     * @throws IOException 
+     */
+    private void saveSettings() throws IOException{
+        
+        String path = "/home/pi/NetBeansProjects/RPI_Lights/vars.txt";
+        
+        WriteTextFile write = new WriteTextFile(path,false);        
+        String data="";
+        data=int_light_timer+";"+latitud+";"+longitud+"\n";
+        write.writeToFile(data);
     }
 }
